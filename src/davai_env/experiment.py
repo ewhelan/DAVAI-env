@@ -343,7 +343,8 @@ class ThisXP(object):
 
     def launch_build(self,
                      drymode=False,
-                     preexisting_pack=False):
+                     preexisting_pack=False,
+                     cleanpack=False):
         """Launch build job."""
         os.environ['DAVAI_START_BUILD'] = str(time.time())
         if self.conf['DEFAULT']['compiling_system'] == 'gmkpack':
@@ -358,6 +359,7 @@ class ThisXP(object):
             self._launch(build_job, 'build',
                          drymode=drymode,
                          preexisting_pack=preexisting_pack,
+                         cleanpack=cleanpack,
                          **self.sources_to_test)
         else:
             raise NotImplementedError("compiling_system == {}".format(self.conf['DEFAULT']['compiling_system']))
