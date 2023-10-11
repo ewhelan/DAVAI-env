@@ -302,8 +302,8 @@ class ThisXP(object):
 
     @property
     def davai_tests_version(self):
-        cmd = ['git', 'log' , '-n1', '--decorate', '--oneline']
-        output = subprocess.check_output(['git', 'log' , '-n1', '--decorate', '--oneline'],
+        cmd = ['git', 'log' , '-n1', '--decorate']
+        output = subprocess.check_output(cmd,
                                          cwd=os.path.join(self.xp_path, self.davai_tests_dir)
                                          ).decode('utf-8').split('\n')
         return output[0]

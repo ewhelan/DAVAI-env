@@ -14,6 +14,7 @@ repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.insert(0, os.path.join(repo_path, 'src'))
 from davai_env import guess_host, config
 from davai_env.experiment import XPmaker
+from davai_env.util import expandpath
 
 DAVAI_HOST = guess_host()
 
@@ -55,7 +56,7 @@ if __name__ == '__main__':
     #                     help="path to an IAL bundle file")
     repos = parser.add_mutually_exclusive_group()
     repos.add_argument('--IAL_repo',
-                       default=config['paths']['IAL_repository'],
+                       default=expandpath(config['paths']['IAL_repository']),
                        dest='IAL_repository',
                        help="Path to IFS-Arpege-LAM Git repository in which to find 'IAL_git_ref' argument. " +
                             ("Default ({}) can be set through section [paths] " +
