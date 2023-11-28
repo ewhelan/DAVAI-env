@@ -282,12 +282,9 @@ class ThisXP(object):
                 # sources to be tested taken from IAL_bundle@IAL_bundle_repository
                 if c.get('comment', None) is None:
                     c['comment'] = c['IAL_bundle']
-                repo = c.get('IAL_bundle_repository', config['paths']['IAL_bundle_repository'])
+                if c['IAL_bundle'].startswith('tag:'):
+                    repo = c.get('IAL_bundle_repository', config['paths']['IAL_bundle_repository'])
                 c['IAL_bundle_repository'] = expandpath(repo)
-            elif 'IAL_bundle_file' in c:
-                # sources to be tested taken from IAL_bundle_file
-                if c.get('comment', None) is None:
-                    c['comment'] = c['IAL_bundle_file']
             self._sources_to_test = c
         return self._sources_to_test
 
@@ -350,11 +347,11 @@ class ThisXP(object):
             if 'IAL_git_ref' in self.sources_to_test:
                 # build from a single IAL Git reference
                 build_job = 'build.gmkpack.build_from_gitref'
-            elif 'IAL_bundle' in self.sources_to_test or 'IAL_bundle_file' in self.sources_to_test:
+            elif 'IAL_bundle' in self.sources_to_test:
                 # build from a bundle
                 build_job = 'build.gmkpack.build_from_bundle'
             else:
-                raise KeyError("Particular config should contain one of: ('IAL_git_ref', 'IAL_bundle', 'IAL_bundle_file')")
+                raise KeyError("Particular config should contain one of: ('IAL_git_ref', 'IAL_bundle_tag', 'IAL_bundle_file')")
             self._launch(build_job, 'build',
                          drymode=drymode,
                          preexisting_pack=preexisting_pack,
