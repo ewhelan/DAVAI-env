@@ -365,15 +365,18 @@ class ThisXP(object):
                      drymode=drymode,
                      profile='rd')
 
-    def launch_jobs(self, only_job=None, drymode=False):
+    def launch_jobs(self, only_job=None, drymode=False, mpiname=None):
         """Launch jobs, either all, or only the one requested."""
+        extra_params = {}
+        if mpiname is not None:
+            extra_params['mpiname'] = mpiname
         only_job_launched = False
         for family, jobs in self.all_jobs.items():
             for job in jobs:
                 task = '.'.join([family, job])
                 name = job
                 if only_job in (None, task):
-                    self._launch(task, name, drymode=drymode)
+                    self._launch(task, name, drymode=drymode, **extra_params)
                     if only_job is not None:
                         only_job_launched = True
         if only_job is not None and not only_job_launched:
