@@ -1,5 +1,4 @@
 # DAVAÏ User Guide
-A. Mary 
 
 DAVAÏ embeds the whole workflow from the source code to the green/red
 light validation status: fetching sources from Git, building
