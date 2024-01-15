@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+# -*- coding:Utf-8 -*-
+"""
+Create a new Davai experiment, from a bundle.
+"""
+from __future__ import print_function, absolute_import, unicode_literals, division
+
+import os
+import argparse
+import sys
+
+# Automatically set the python path for davai_cmd
+repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.insert(0, os.path.join(repo_path, 'src'))
+from davai_env import guess_host, config
+from davai_env.experiment import XPmaker
+from davai_env.util import expandpath
+
+DAVAI_HOST = guess_host()
+
+
+def main(sources_to_test,
+         davai_tests_version,
+         davai_tests_origin=config['defaults']['davai_tests_origin'],
+         usecase=config['defaults']['usecase'],
+         host=DAVAI_HOST):
+    """
+    Setup an XP.
+
+    :param sources_to_test: information about the sources to be tested, provided as a dict
+    :param davai_tests_version: version of the test bench to be used
+    :param davai_tests_origin: URL of the DAVAI-tests origin repository to be cloned in XP
+    :param usecase: among NRV, ELP, PC, ...
+    :param host: name of host machine, to link necessary packages and get according config file
+        (otherwise guessed)
+    """
+    xp = XPmaker.new_xp(sources_to_test=sources_to_test,
+                        davai_tests_version=davai_tests_version,
+                        davai_tests_origin=davai_tests_origin,
+                        usecase=usecase,
+                        host=host)
+    xp.write_genesis(" ".join(sys.argv))
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description='Create a Davai experiment based on a Git reference.')
+    parser.add_argument('bundle',
+                        help="An IAL-bundle, either as a local file or " +
+                             "a git ref (tag, commit) in the IAL-bundle repository " +
+                             "(repo URL to be specified via arg -r in this case).")
+    parser.add_argument('-r', '--IAL_bundle_repo',
+                        default=None,
+                        dest='IAL_bundle_repository',
+                        help="URL (or path) of IAL-bundle repository in which to find the bundle in the given reference. " +
+                             "E.g. 'https://github.com/ACCORD-NWP/IAL-bundle' or '~/repositories/IAL-bundle'.")
+    parser.add_argument('-v', '--tests_version',
+                        dest='davai_tests_version',
+                        help="Version of the Davai test bench to be used.",
+                        required=True)
+    parser.add_argument('-c', '--comment',
+                        default=None,
+                        help="Comment about experiment. Defaults to bundle.")
+    parser.add_argument('-u', '--usecase',
+                        default=config['defaults']['usecase'],
+                        help="Usecase: NRV (restrained set of canonical tests) or ELP (extended elementary tests); " +
+                             "More (PC, ...) to come. Defaults to: '{}'".format(config['defaults']['usecase']))
+    parser.add_argument('--origin', '--davai_tests_origin',
+                        default=config['defaults']['davai_tests_origin'],
+                        dest='davai_tests_origin',
+                        help=("URL of the DAVAI-tests origin repository to be cloned in XP. " +
+                              "Default ({}) can be set through section [defaults] " +
+                              "of user config file").format(config['defaults']['davai_tests_origin']))
+    parser.add_argument('--host',
+                        default=DAVAI_HOST,
+                        help="Generic name of host machine, in order to find paths to necessary packages. " +
+                             ("Default is guessed ({}), or can be set through " +
+                              "section 'hosts' of user config file").format(DAVAI_HOST))
+    args = parser.parse_args()
+
+    if args.IAL_bundle_repository is not None:
+        if any([args.IAL_bundle_repository.startswith(p) for p in ['https://', 'ssh://', 'git://']]):
+            IAL_bundle_repository = args.IAL_bundle_repository
+        else:
+            IAL_bundle_repository = os.path.abspath(args.IAL_bundle_repository)
+            assert os.path.isdir(IAL_bundle_repository)
+        sources_to_test = dict(IAL_bundle_ref=args.bundle,
+                               IAL_bundle_repository=IAL_bundle_repository)
+    else:
+        sources_to_test = dict(IAL_bundle_file=os.path.abspath(args.bundle))
+    sources_to_test['comment'] = args.comment
+
+    main(sources_to_test,
+         args.davai_tests_version,
+         davai_tests_origin=args.davai_tests_origin,
+         usecase=args.usecase,
+         host=args.host)
