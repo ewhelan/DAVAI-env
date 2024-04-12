@@ -29,3 +29,6 @@
 
    After initializing the Ciboulaï page for the experiment, the command will first run the build of the branch and wait for the executables (that step may take a while, depending on the scope of your modifications, especially with several compilation flavours). Once build completed, it will then launch the tests (through scheduler on HPC).
 
+## To test a bundle, i.e. a combination of modifications in IAL and other repos
+
+Use command `davai-new_xp_from_bundle`. The rest is identical.
