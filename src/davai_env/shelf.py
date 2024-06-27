@@ -106,7 +106,7 @@ class Shelf(object):
     def arch_prestage(self, archive, **_):
         """ """
         from bronx.system.mf import prestage
-        prestage([os.path.join('/home', self.vtx_vapp_vconf, self.radical)],
+        prestage([os.path.join('/home', self.vtx_vapp_vconf, self.radical, '*')],
                  mail='alexandre.mary@meteo.fr',
                  archive_machine=archive)
 
