@@ -13,9 +13,9 @@ separately, in the [DAVAI-tests](https://github.com/ACCORD-NWP/DAVAI-tests) repo
 Installation
 ------------
 
-* on [`belenos`@MF](doc/belenos.md)
+* on [`belenos`@MF](docs/src/belenos.md)
 
-* on [`Atos/bologna`@ECMWF](doc/atos_bologna.md)
+* on [`Atos/bologna`@ECMWF](docs/src/atos_bologna.md)
 
 * or to setup your own install:
   * Clone this repository, e.g. in `~/repositories/`:\
