@@ -71,13 +71,7 @@ def get_parser():
     return parser
 
 
-def new_xp(
-    sources_to_test,
-    davai_tests_version,
-    davai_tests_origin=config["defaults"]["davai_tests_origin"],
-    usecase=config["defaults"]["usecase"],
-    host=DAVAI_HOST,
-):
+def new_xp():
     """
     Setup an XP.
 
