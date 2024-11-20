@@ -15,9 +15,9 @@ def main(preexisting_pack=False,
          cleanpack=False,
          drymode=False):
     this_xp = ThisXP()
-    this_xp.launch_build(drymode=drymode,
-                         preexisting_pack=preexisting_pack,
-                         cleanpack=cleanpack)
+    this_xp.fetch_sources_and_build(drymode=drymode,
+                                    preexisting_pack=preexisting_pack,
+                                    cleanpack=cleanpack)
 
 
 if __name__ == "__main__":

@@ -344,7 +344,7 @@ class ThisXP(object):
                      drymode=False,
                      preexisting_pack=False,
                      cleanpack=False):
-        """Launch build job."""
+        """Launch build job. DEPRECATED -> *_gather_sources + *_launch_build"""
         os.environ['DAVAI_START_BUILD'] = str(time.time())
         if self.conf['DEFAULT']['compiling_system'] == 'gmkpack':
             if 'IAL_git_ref' in self.sources_to_test:
@@ -354,7 +354,8 @@ class ThisXP(object):
                 # build from a bundle
                 build_job = 'build.gmkpack.build_from_bundle'
             else:
-                raise KeyError("Particular config should contain one of: ('IAL_git_ref', 'IAL_bundle_ref', 'IAL_bundle_file')")
+                msg = "Config file '{}' should contain one of: ('IAL_git_ref', 'IAL_bundle_ref', 'IAL_bundle_file')"
+                raise KeyError(msg.format(self.sources_to_test_file))
             self._launch(build_job, 'build',
                          drymode=drymode,
                          preexisting_pack=preexisting_pack,
@@ -363,6 +364,60 @@ class ThisXP(object):
         else:
             raise NotImplementedError("compiling_system == {}".format(self.conf['DEFAULT']['compiling_system']))
         # run build monitoring
+        if guess_host() != 'atos_bologna':  # FIXME: dirty
+            set_default_mtooldir()
+        self._launch('build.wait4build', 'build',
+                     drymode=drymode,
+                     profile='rd')
+
+    def fetch_sources_and_build(self,
+                                drymode=False,
+                                # gmkpack arguments
+                                preexisting_pack=False,
+                                cleanpack=False):
+        """Gather sources (interactively) then launch build (batch/scheduler)."""
+        if self.conf['DEFAULT']['compiling_system'] == 'gmkpack':
+            self.gmkpack_fetch_sources(drymode=drymode,
+                                       preexisting_pack=preexisting_pack,
+                                       cleanpack=cleanpack)
+            self.gmkpack_launch_build(drymode=drymode,
+                                      cleanpack=cleanpack)
+        else:
+            raise NotImplementedError("compiling_system == {}".format(self.conf['DEFAULT']['compiling_system']))
+
+    def gmkpack_fetch_sources(self,
+                              drymode=False,
+                              preexisting_pack=False,
+                              cleanpack=False):
+        """Fetch sources for build with gmkpack."""
+        if 'IAL_git_ref' in self.sources_to_test:
+            # build from a single IAL Git reference
+            build_job = 'build.gmkpack.gitref2pack'
+        elif any([k in self.sources_to_test for k in ['IAL_bundle_ref', 'IAL_bundle_file']]):
+            # build from a bundle
+            build_job = 'build.gmkpack.bundle2pack'
+        else:
+            msg = "Config file '{}' should contain one of: ('IAL_git_ref', 'IAL_bundle_ref', 'IAL_bundle_file')"
+            raise KeyError(msg.format(self.sources_to_test_file))
+        self._launch(build_job, 'build',
+                     drymode=drymode,
+                     profile='rd',  # interactive, not in batch/scheduler
+                     preexisting_pack=preexisting_pack,
+                     cleanpack=cleanpack,
+                     **self.sources_to_test)
+
+    def gmkpack_launch_build(self,
+                             drymode=False,
+                             cleanpack=False):
+        """Launch build job."""
+        os.environ['DAVAI_START_BUILD'] = str(time.time())
+        # run build in batch/scheduler
+        build_job = 'build.gmkpack.pack2bin'
+        self._launch(build_job, 'build',
+                     drymode=drymode,
+                     cleanpack=cleanpack,
+                     **self.sources_to_test)
+        # run build monitoring (interactively)
         if guess_host() != 'atos_bologna':  # FIXME: dirty
             set_default_mtooldir()
         self._launch('build.wait4build', 'build',
