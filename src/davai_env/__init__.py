@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding:Utf-8 -*-
 """
 Davai environment around experiments and shelves.
 """
@@ -15,7 +13,7 @@ import io
 import subprocess
 
 _package_rootdir = os.path.dirname(os.path.dirname(os.path.realpath(__path__[0])))  # realpath to resolve symlinks
-__version__ = io.open(os.path.join(_package_rootdir, 'VERSION'), 'r').read().strip()
+__version__ = "1.1.10"
 __this_repo__ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 # fixed parameters
