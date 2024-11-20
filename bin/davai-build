@@ -22,7 +22,7 @@ def main(preexisting_pack=False,
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='Build executables. To be executed from the XP directory !')
+    parser = argparse.ArgumentParser(description='Fetch sources (interactively) and build executables (batch/scheduler). To be executed from the XP directory !')
     parser.add_argument('-e', '--preexisting_pack',
                         action='store_true',
                         help="Assume the pack already preexists.")
