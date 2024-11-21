@@ -370,25 +370,34 @@ class ThisXP(object):
                      drymode=drymode,
                      profile='rd')
 
-    def fetch_sources_and_build(self,
-                                drymode=False,
-                                # gmkpack arguments
-                                preexisting_pack=False,
-                                cleanpack=False):
-        """Gather sources (interactively) then launch build (batch/scheduler)."""
+    def fetch_sources(self,
+                      drymode=False,
+                      # gmkpack arguments
+                      preexisting_pack=False,
+                      cleanpack=False):
+        """Gather sources (interactively)."""
         if self.conf['DEFAULT']['compiling_system'] == 'gmkpack':
-            self.gmkpack_fetch_sources(drymode=drymode,
-                                       preexisting_pack=preexisting_pack,
-                                       cleanpack=cleanpack)
-            self.gmkpack_launch_build(drymode=drymode,
-                                      cleanpack=cleanpack)
+            self._gmkpack_fetch_sources(drymode=drymode,
+                                        preexisting_pack=preexisting_pack,
+                                        cleanpack=cleanpack)
         else:
             raise NotImplementedError("compiling_system == {}".format(self.conf['DEFAULT']['compiling_system']))
 
-    def gmkpack_fetch_sources(self,
-                              drymode=False,
-                              preexisting_pack=False,
-                              cleanpack=False):
+    def launch_build(self,
+                     drymode=False,
+                     # gmkpack arguments
+                     cleanpack=False):
+        """Launch build in batch through scheduler."""
+        if self.conf['DEFAULT']['compiling_system'] == 'gmkpack':
+            self._gmkpack_launch_build(drymode=drymode,
+                                       cleanpack=cleanpack)
+        else:
+            raise NotImplementedError("compiling_system == {}".format(self.conf['DEFAULT']['compiling_system']))
+
+    def _gmkpack_fetch_sources(self,
+                               drymode=False,
+                               preexisting_pack=False,
+                               cleanpack=False):
         """Fetch sources for build with gmkpack."""
         if 'IAL_git_ref' in self.sources_to_test:
             # build from a single IAL Git reference
@@ -406,9 +415,9 @@ class ThisXP(object):
                      cleanpack=cleanpack,
                      **self.sources_to_test)
 
-    def gmkpack_launch_build(self,
-                             drymode=False,
-                             cleanpack=False):
+    def _gmkpack_launch_build(self,
+                              drymode=False,
+                              cleanpack=False):
         """Launch build job."""
         os.environ['DAVAI_START_BUILD'] = str(time.time())
         # run build in batch/scheduler
