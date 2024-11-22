@@ -332,7 +332,7 @@ class ThisXP(object):
         if not drymode:
             subprocess.check_call(cmd)
 
-    def launch_ciboulai_init(self):
+    def ciboulai_init(self):
         """(Re-)Initialize Ciboulai dashboard."""
         self._launch('ciboulai_xpsetup', 'ciboulai_xpsetup',
                      profile='rd',
@@ -340,59 +340,25 @@ class ThisXP(object):
                      tests_version=self.davai_tests_version.replace("'", '"'),
                      **self.sources_to_test)
 
-    def launch_build(self,
-                     drymode=False,
-                     preexisting_pack=False,
-                     cleanpack=False):
-        """Launch build job. DEPRECATED -> *_gather_sources + *_launch_build"""
-        os.environ['DAVAI_START_BUILD'] = str(time.time())
-        if self.conf['DEFAULT']['compiling_system'] == 'gmkpack':
-            if 'IAL_git_ref' in self.sources_to_test:
-                # build from a single IAL Git reference
-                build_job = 'build.gmkpack.build_from_gitref'
-            elif any([k in self.sources_to_test for k in ['IAL_bundle_ref', 'IAL_bundle_file']]):
-                # build from a bundle
-                build_job = 'build.gmkpack.build_from_bundle'
-            else:
-                msg = "Config file '{}' should contain one of: ('IAL_git_ref', 'IAL_bundle_ref', 'IAL_bundle_file')"
-                raise KeyError(msg.format(self.sources_to_test_file))
-            self._launch(build_job, 'build',
-                         drymode=drymode,
-                         preexisting_pack=preexisting_pack,
-                         cleanpack=cleanpack,
-                         **self.sources_to_test)
-        else:
-            raise NotImplementedError("compiling_system == {}".format(self.conf['DEFAULT']['compiling_system']))
-        # run build monitoring
-        if guess_host() != 'atos_bologna':  # FIXME: dirty
-            set_default_mtooldir()
-        self._launch('build.wait4build', 'build',
-                     drymode=drymode,
-                     profile='rd')
-
-    def fetch_sources(self,
-                      drymode=False,
-                      # gmkpack arguments
-                      preexisting_pack=False,
-                      cleanpack=False):
-        """Gather sources (interactively)."""
-        if self.conf['DEFAULT']['compiling_system'] == 'gmkpack':
-            self._gmkpack_fetch_sources(drymode=drymode,
-                                        preexisting_pack=preexisting_pack,
-                                        cleanpack=cleanpack)
-        else:
-            raise NotImplementedError("compiling_system == {}".format(self.conf['DEFAULT']['compiling_system']))
-
-    def launch_build(self,
-                     drymode=False,
-                     # gmkpack arguments
-                     cleanpack=False):
-        """Launch build in batch through scheduler."""
-        if self.conf['DEFAULT']['compiling_system'] == 'gmkpack':
+    def build(self,
+              drymode=False,
+              # gmkpack arguments
+              skip_fetching_sources=False,
+              preexisting_pack=False,
+              cleanpack=False):
+        """Generic, main davai build of executables."""
+        compiling_system = self.conf['DEFAULT']['compiling_system']
+        if compiling_system == 'gmkpack':
+            if not skip_fetching_sources:
+                # fetch sources (interactively)
+                self._gmkpack_fetch_sources(drymode=drymode,
+                                            preexisting_pack=preexisting_pack,
+                                            cleanpack=cleanpack)
+            # launch build in batch/scheduler
             self._gmkpack_launch_build(drymode=drymode,
                                        cleanpack=cleanpack)
         else:
-            raise NotImplementedError("compiling_system == {}".format(self.conf['DEFAULT']['compiling_system']))
+            raise NotImplementedError("compiling_system == {}".format(compiling_system))
 
     def _gmkpack_fetch_sources(self,
                                drymode=False,

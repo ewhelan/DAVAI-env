@@ -13,7 +13,7 @@ from davai_env.experiment import ThisXP
 
 def main():
     this_xp = ThisXP()
-    this_xp.launch_ciboulai_init()
+    this_xp.ciboulai_init()
 
 
 if __name__ == "__main__":

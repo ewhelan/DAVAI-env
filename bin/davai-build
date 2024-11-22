@@ -19,12 +19,10 @@ def main(
          cleanpack=False,
          ):
     this_xp = ThisXP()
-    if not skip_fetching_sources:
-        this_xp.fetch_sources(drymode=drymode,
-                              preexisting_pack=preexisting_pack,
-                              cleanpack=cleanpack)
-    this_xp.launch_build(drymode=drymode,
-                         cleanpack=cleanpack)
+    this_xp.build(preexisting_pack=preexisting_pack,
+                  cleanpack=cleanpack,
+                  skip_fetching_sources=skip_fetching_sources,
+                  drymode=drymode)
 
 
 if __name__ == "__main__":
