@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding:Utf-8 -*-
 
-import os
-import sys
 import argparse
 
-# Automatically set the python path for davai_cmd
-repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-sys.path.insert(0, os.path.join(repo_path, 'src'))
-from davai_env.experiment import ThisXP
+from ..experiment import ThisXP
+
+__all__ = ['main']
 
 
 def main():
-    this_xp = ThisXP()
-    return this_xp.xpid
-
-
-if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Check if the current working directory is an experiment. ' +
                                                  'Return the name of the experiment if so (and not silent mode).')
@@ -24,8 +16,7 @@ if __name__ == "__main__":
                         action='store_true',
                         help="Silent mode")
     args = parser.parse_args()
+    this_xp = ThisXP()
+    if not args.silent:
+        print(this_xp.xpid)
 
-    if args.silent:
-        main()
-    else:
-        print(main())

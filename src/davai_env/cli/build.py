@@ -1,32 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding:Utf-8 -*-
 
-import os
-import sys
 import argparse
 
-# Automatically set the python path for davai_cmd
-repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-sys.path.insert(0, os.path.join(repo_path, 'src'))
-from davai_env.experiment import ThisXP
+from ..experiment import ThisXP
+
+__all__ = ['main']
 
 
-def main(
-         skip_fetching_sources=False,
-         drymode=False,
-         # gmkpack arguments
-         preexisting_pack=False,
-         cleanpack=False,
-         ):
+def main():
+    args = get_args()
     this_xp = ThisXP()
-    this_xp.build(preexisting_pack=preexisting_pack,
-                  cleanpack=cleanpack,
-                  skip_fetching_sources=skip_fetching_sources,
-                  drymode=drymode)
+    this_xp.build(
+                  skip_fetching_sources=args.skip_fetching_sources,
+                  drymode=args.drymode,
+                  # gmkpack arguments
+                  preexisting_pack=args.preexisting_pack,
+                  cleanpack=args.cleanpack,
+                  )
 
 
-if __name__ == "__main__":
-
+def get_args():
     parser = argparse.ArgumentParser(description='Fetch sources (interactively) and build executables (batch/scheduler). To be executed from the XP directory !')
     parser.add_argument('-s', '--skip_fetching_sources',
                         action='store_true',
@@ -40,9 +34,5 @@ if __name__ == "__main__":
     parser.add_argument('--drymode',
                         action='store_true',
                         help="Dry mode: print commands to be executed, but do not run them")
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    main(preexisting_pack=args.preexisting_pack,
-         cleanpack=args.cleanpack,
-         skip_fetching_sources=args.skip_fetching_sources,
-         drymode=args.drymode)

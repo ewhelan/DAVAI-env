@@ -3,25 +3,19 @@
 """
 Check the status of tests in a Davai experiment.
 """
-from __future__ import print_function, absolute_import, unicode_literals, division
 
-import os
 import argparse
-import sys
 
-# Automatically set the python path for davai_cmd
-repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-sys.path.insert(0, os.path.join(repo_path, 'src'))
-from davai_env.experiment import ThisXP
+from ..experiment import ThisXP
 
 
-def main(task=None):
+def main():
+    args = get_args()
     this_xp = ThisXP()
-    this_xp.status(task)
+    this_xp.status(args.task)
 
 
-if __name__ == '__main__':
-
+def get_args():
     parser = argparse.ArgumentParser(description=' '.join(['Check status of current experiment.',
                                                            'Must be called from the XP directory.',
                                                            'Works with tasks summaries in cache,',
@@ -30,6 +24,5 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--task',
                         default=None,
                         help="Specify a task name to get the filepath to its detailed summary.")
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    main(args.task)

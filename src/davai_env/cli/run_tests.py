@@ -1,37 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding:Utf-8 -*-
 
-import os
-import sys
 import argparse
 
-# Automatically set the python path for davai_cmd
-repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-sys.path.insert(0, os.path.join(repo_path, 'src'))
-from davai_env.experiment import ThisXP
+from ..experiment import ThisXP
+
+__all__ = ['main']
 
 
-def main(only_job=None,
-         list_jobs=False,
-         drymode=False,
-         mpiname=None):
+def main():
+
+    args = get_args()
+
     this_xp = ThisXP()
-    if list_jobs:
+    if args.list_jobs:
         this_xp.print_jobs()
     else:
-        this_xp.launch_jobs(only_job=only_job,
-                            drymode=drymode,
-                            mpiname=mpiname)
+        this_xp.launch_jobs(only_job=args.only_job,
+                            drymode=args.drymode,
+                            mpiname=args.mpiname)
         this_xp.afterlaunch_prompt()
 
-
-if __name__ == "__main__":
-
+def get_args():
     parser = argparse.ArgumentParser(description='Launch tests. To be ran from the XP directory only !')
     parser.add_argument('only_job',
                         nargs='?',
                         default=None,
-                        help="Restrict the launch to only one job")
+                        help="Restrict the launch to the given job only (which may contain several tests)")
     parser.add_argument('-l', '--list_jobs',
                         action='store_true',
                         help="List the jobs supposed to be launched")
@@ -41,9 +36,5 @@ if __name__ == "__main__":
     parser.add_argument('--drymode',
                         action='store_true',
                         help="Dry mode: print commands to be executed, but do not run them")
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    main(only_job=args.only_job,
-         list_jobs=args.list_jobs,
-         mpiname=args.mpiname,
-         drymode=args.drymode)

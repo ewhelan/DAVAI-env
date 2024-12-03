@@ -12,10 +12,10 @@ from .. import config, DAVAI_HOST
 from ..experiment import XPmaker
 from ..util import expandpath
 
-__all__ = ['script']
+__all__ = ['main']
 
 
-def script():
+def main():
 
     # get args
     args = get_args()

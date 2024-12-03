@@ -17,7 +17,17 @@ build-backend = "setuptools.build_meta"
 davai = "src/davai_env"
 
 [project.scripts]
+davai-build = "davai.cli.build"
+davai-ciboulai_init = "davai.cli.ciboulai_init"
+davai-config = "davai.cli.config"
+davai-cwd_is_xp = "davai.cli.cwd_is_xp"
 davai-new_xp = "davai.cli.new_xp"
+davai-new_xp_from_bundle = "davai.cli.new_xp_from_bundle"
+davai-run_tests = "davai.cli.run_tests"
+davai-run_xp = "davai.cli.run_xp"
+davai-shelf = "davai.cli.shelf"
+davai-tests_version = "davai.cli.tests_version"
+davai-xp_status = "davai.cli.xp_status"
 
 [tool.setuptools.package-data]
 "davai" = ["conf/*.ini"]

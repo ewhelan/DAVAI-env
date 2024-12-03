@@ -4,19 +4,22 @@
 A shelf is a Vortex pseudo-experiment in which are stored input data as in a Vortex experiment.
 This tool helps to move shelves between archive, marketplace cache and tarfiles.
 """
-from __future__ import print_function, absolute_import, unicode_literals, division
 
 import os
 import sys
 import argparse
 
-# Automatically set the python path for davai_cmd
-repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-sys.path.insert(0, os.path.join(repo_path, 'src'))
-from davai_env.shelf import Shelf
+from ..shelf import Shelf
+
+__all__ = ['main']
 
 
-if __name__ == '__main__':
+def main():
+    args = get_args()
+    shelf = Shelf(args.shelf)
+    getattr(shelf, args.action)(**vars(args))
+
+def get_args():
     parser = argparse.ArgumentParser(description='Move shelves between archive, marketplace cache and tarfiles.')
     parser.add_argument('action',
                         choices=['mkt2arch', 'mkt2tar', 'tar2mkt', 'arch2mkt', 'arch_prestage'],
@@ -35,7 +38,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if 'arch' in args.action:
         assert args.archive is not None, "archive argument (-a) must be provided with action: '{}'".format(args.action)
-
-    shelf = Shelf(args.shelf)
-    getattr(shelf, args.action)(**vars(args))
+    return args
 
