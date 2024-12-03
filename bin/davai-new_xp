@@ -4,10 +4,10 @@
 import os
 import sys
 
-# CLEANME (when on PyPI) : Automatically set the python path for davai_cmd
+# Automatically set the python path for davai_cmd
 repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.insert(0, os.path.join(repo_path, 'src'))
 
-from davai_env.cli.new_xp_from_bundle import script
+from davai_env.cli.new_xp import script
 script()
 

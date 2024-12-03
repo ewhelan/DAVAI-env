@@ -61,7 +61,8 @@ class XPmaker(object):
     def new_xp(cls, sources_to_test, davai_tests_version,
                davai_tests_origin=config['defaults']['davai_tests_origin'],
                usecase=config['defaults']['usecase'],
-               host=guess_host()):
+               host=guess_host(),
+               genesis_commandline=None):
         """
         Create a new experiment.
 
@@ -70,6 +71,7 @@ class XPmaker(object):
         :param davai_tests_origin: origin repository of the DAVAI-tests to be cloned
         :param usecase: type of set of tests to be prepared
         :param host: host machine
+        :param genesis_commandline: command-line that was used to generate the experiment, to be saved in it
         """
 
         assert usecase in ('NRV', 'ELP'), "Usecase not implemented yet: " + usecase
@@ -82,6 +84,8 @@ class XPmaker(object):
                  davai_tests_origin=davai_tests_origin,
                  usecase=usecase,
                  host=host)
+        if genesis_commandline:
+            xp.write_genesis(genesis_commandline)
         return xp
 
 

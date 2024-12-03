@@ -111,3 +111,5 @@ def initialized():
         os.makedirs(DAVAI_RC_DIR)
     # User config
     preset_user_config_file()
+
+DAVAI_HOST = guess_host()
