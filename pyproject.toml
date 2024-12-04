@@ -1,13 +1,34 @@
 [project]
 name = "davai"
-version = "1.1.10"
-description = ""
+dynamic = ["version"]
+description = "Davai environment: commandlines for running DAVAI-tests experiments."
 readme = "README.md"
 requires-python = ">=3.7"
 keywords = []
 license = {text = "CECILL-C"}
-authors = []
-dependencies = []
+authors = [
+    { name = "Alexandre Mary"  , email = "alexandre.mary@meteo.fr"}
+    ]
+dependencies=[
+    "pyyaml",
+    ]
+
+[project.urls]
+source = "https://github.com/ACCORD-NWP/DAVAI-env.git"
+tracker = "https://github.com/ACCORD-NWP/DAVAI-env/issues"
+
+[project.scripts]
+davai-build = "davai.cli.build:main"
+davai-ciboulai_init = "davai.cli.ciboulai_init:main"
+davai-config = "davai.cli.config:main"
+davai-cwd_is_xp = "davai.cli.cwd_is_xp:main"
+davai-new_xp = "davai.cli.new_xp:main"
+davai-new_xp_from_bundle = "davai.cli.new_xp_from_bundle:main"
+davai-run_tests = "davai.cli.run_tests:main"
+davai-run_xp = "davai.cli.run_xp:main"
+davai-shelf = "davai.cli.shelf:main"
+davai-tests_version = "davai.cli.tests_version:main"
+davai-xp_status = "davai.cli.xp_status:main"
 
 [build-system]
 requires = ["setuptools"]
@@ -16,18 +37,9 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.package-dir]
 davai = "src/davai_env"
 
-[project.scripts]
-davai-build = "davai.cli.build"
-davai-ciboulai_init = "davai.cli.ciboulai_init"
-davai-config = "davai.cli.config"
-davai-cwd_is_xp = "davai.cli.cwd_is_xp"
-davai-new_xp = "davai.cli.new_xp"
-davai-new_xp_from_bundle = "davai.cli.new_xp_from_bundle"
-davai-run_tests = "davai.cli.run_tests"
-davai-run_xp = "davai.cli.run_xp"
-davai-shelf = "davai.cli.shelf"
-davai-tests_version = "davai.cli.tests_version"
-davai-xp_status = "davai.cli.xp_status"
-
 [tool.setuptools.package-data]
 "davai" = ["conf/*.ini"]
+
+[tool.setuptools.dynamic]
+version = {attr = "davai.__version__"}
+

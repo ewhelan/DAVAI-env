@@ -1,7 +1,6 @@
 """
 Davai environment around experiments and shelves.
 """
-from __future__ import print_function, absolute_import, unicode_literals, division
 
 import importlib.resources
 import sys
@@ -13,7 +12,7 @@ import io
 import subprocess
 
 _package_rootdir = os.path.dirname(os.path.dirname(os.path.realpath(__path__[0])))  # realpath to resolve symlinks
-__version__ = "1.1.10"
+__version__ = "1.2.0"
 __this_repo__ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 # fixed parameters

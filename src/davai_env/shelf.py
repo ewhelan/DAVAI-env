@@ -4,7 +4,6 @@
 A shelf is a Vortex pseudo-experiment in which are stored input data as in a Vortex experiment.
 A Shelf object helps to move a shelf between archive, marketplace cache and tarfiles.
 """
-from __future__ import print_function, absolute_import, unicode_literals, division
 
 import os
 import configparser
