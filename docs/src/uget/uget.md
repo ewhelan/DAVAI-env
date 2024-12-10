@@ -1,7 +1,5 @@
 # User Documentation Uenv/Uget
 
-Alexandre Mary et al.
-
 The *uenv/uget* tool developped in Vortex is the counterpart of
 *genv/gget* (MF/GCO op team), but user-oriented (hence the **u** instead
 of **g**) and shareable with other users. It enables, in Vortex
@@ -20,9 +18,9 @@ use it properly.
 The following example shows how to modify components of an Arome-France
 *genv* catalog and modify its components piece by piece.
 
-### Before first use
+### Before first use {#uget-first-use}
 
-- load Genv/Gget (in your *profile*, if not already done):
+- on `belenos`, load Genv/Gget (in your *profile*, if not already done):
 
   ```bash
   export PATH=/home/mf/dp/marp/gco/public/bin:$PATH

@@ -18,6 +18,7 @@ pages = [
         "Investigate Problems" => "investigatingproblems.md",
         "Build options" => "buildoptions.md",
         "Input data" => "inputdata.md",
+        "Update namelists" => "uget/update_namelists.md",
         "Other options" => "otheroptions.md",
         "User configuration" =>  "userconfiguration.md",
         "Parallel profiling" => "parallelprofiling.md",
