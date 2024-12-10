@@ -14,6 +14,7 @@ def main():
     this_xp.build(
                   skip_fetching_sources=args.skip_fetching_sources,
                   drymode=args.drymode,
+                  fake_build=args.fake_build,
                   # gmkpack arguments
                   preexisting_pack=args.preexisting_pack,
                   cleanpack=args.cleanpack,
@@ -28,6 +29,10 @@ def get_args():
     parser.add_argument('-e', '--preexisting_pack',
                         action='store_true',
                         help="Gmkpack: assume the pack already preexists, and repopulate it with sources changes.")
+    parser.add_argument('-f', '--fake_build',
+                        action='store_true',
+                        help=" ".join(["Fake build: assume binaries already present (in pack),"
+                                       "copy them in vortex workflow. Better know what you're doing..."]))
     parser.add_argument('-c', '--cleanpack',
                         action='store_true',
                         help="Gmkpack: clean pack before git2pack+pack2bin.")

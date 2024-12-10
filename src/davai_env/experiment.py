@@ -343,8 +343,9 @@ class ThisXP(object):
 
     def build(self,
               drymode=False,
-              # gmkpack arguments
               skip_fetching_sources=False,
+              fake_build=False,
+              # gmkpack arguments
               preexisting_pack=False,
               cleanpack=False):
         """Generic, main davai build of executables."""
@@ -357,7 +358,8 @@ class ThisXP(object):
                                             cleanpack=cleanpack)
             # launch build in batch/scheduler
             self._gmkpack_launch_build(drymode=drymode,
-                                       cleanpack=cleanpack)
+                                       cleanpack=cleanpack,
+                                       fake_build=fake_build)
         else:
             raise NotImplementedError("compiling_system == {}".format(compiling_system))
 
@@ -384,7 +386,8 @@ class ThisXP(object):
 
     def _gmkpack_launch_build(self,
                               drymode=False,
-                              cleanpack=False):
+                              cleanpack=False,
+                              fake_build=False):
         """Launch build job."""
         os.environ['DAVAI_START_BUILD'] = str(time.time())
         # run build in batch/scheduler
@@ -392,6 +395,7 @@ class ThisXP(object):
         self._launch(build_job, 'build',
                      drymode=drymode,
                      cleanpack=cleanpack,
+                     fake_build=fake_build,
                      **self.sources_to_test)
         # run build monitoring (interactively)
         if guess_host() != 'atos_bologna':  # FIXME: dirty
