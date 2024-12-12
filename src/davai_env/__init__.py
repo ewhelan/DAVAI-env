@@ -1,7 +1,6 @@
 """
 Davai environment around experiments and shelves.
 """
-
 import importlib.resources
 import sys
 import os
@@ -11,9 +10,7 @@ import socket
 import io
 import subprocess
 
-_package_rootdir = os.path.dirname(os.path.dirname(os.path.realpath(__path__[0])))  # realpath to resolve symlinks
 __version__ = "1.2.0"
-__this_repo__ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 # fixed parameters
 DAVAI_RC_DIR = os.path.join(os.environ['HOME'], '.davairc')
@@ -48,17 +45,13 @@ def guess_host():
 
 # CONFIG
 config = configparser.ConfigParser()
-with importlib.resources.open_text(
-        "davai.conf", "base.ini",
-) as fh:
+with importlib.resources.open_text("davai.conf", "base.ini",) as fh:
     config.read_file(fh)
 # read user config a first time to help guessing host
 if os.path.exists(CONFIG_USER_FILE):
     config.read(CONFIG_USER_FILE)
 # then complete config with host config file
-with importlib.resources.open_text(
-    "davai.conf", f"{guess_host()}.ini",
-) as fh:
+with importlib.resources.open_text("davai.conf", f"{guess_host()}.ini") as fh:
     config.read_file(fh)
 # and read again user config so that it overwrites host config
 if os.path.exists(CONFIG_USER_FILE):
