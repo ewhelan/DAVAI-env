@@ -14,6 +14,6 @@ makedocs(
 
 deploydocs(
     repo = "github.com/ACCORD-NWP/DAVAI-env.git",
-    devbranch = "master",   
-    devurl = "master",
+    devbranch = "main",   
+    devurl = "main",
 )
