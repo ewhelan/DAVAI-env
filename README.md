@@ -50,6 +50,8 @@ More details to be found in the documentation, in particular in case of a multi-
 Tests versions and reference experiments
 ----------------------------------------
 
+**From CY5T1 onwards, switch to v2 of DAVAI, unified repository (DAVAI-env and DAVAI-tests) : all information to be found on https://github.com/ACCORD-NWP/DAVAI**
+
 => https://github.com/ACCORD-NWP/DAVAI-tests/wiki/Versions-of-tests
 
 Documentation
